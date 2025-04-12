@@ -1,6 +1,9 @@
 /// <reference lib="webworker" />
 
-import { ProgressInfo } from '@huggingface/transformers';
+import {
+  AutomaticSpeechRecognitionOutput,
+  ProgressInfo,
+} from '@huggingface/transformers';
 import { WorkerMessage, WorkerResponse } from '..';
 import { TranscriberPipeline } from '../transcriber-pipeline';
 
@@ -10,6 +13,14 @@ addEventListener('message', async ({ data }: { data: WorkerMessage }) => {
       const transcriber = await TranscriberPipeline.getInstance(
         progressCallback
       );
+      const output = await transcriber(data.audio);
+      const completeResponse: WorkerResponse = {
+        responseType: 'speech-to-text',
+        status: 'complete',
+        playbackUrl: data.playbackUrl,
+        text: (output as AutomaticSpeechRecognitionOutput).text,
+      };
+      postMessage(completeResponse);
       break;
 
     default:

@@ -4,10 +4,16 @@ import { RecordingOutput } from './components';
 import { TranscriberService } from './transcriber.service';
 import { NoteCardComponent } from './components/note-card/note-card.component';
 import { LoadingBarComponent } from './components/loading-bar/loading-bar.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @Component({
   selector: 'app-root',
-  imports: [AudioRecorderComponent, NoteCardComponent, LoadingBarComponent],
+  imports: [
+    AudioRecorderComponent,
+    NoteCardComponent,
+    LoadingBarComponent,
+    SpinnerComponent,
+  ],
   template: `
     <div class="app-container">
       <header class="app-header">
@@ -23,7 +29,9 @@ import { LoadingBarComponent } from './components/loading-bar/loading-bar.compon
         ></app-audio-recorder>
       </section>
 
-      @if(transcriberService.loadingBar().progress > 0) {
+      @if(transcriberService.isTranscribing()) {
+      <app-spinner />
+      } @if(transcriberService.loadingBar().progress > 0) {
       <section>
         <app-loading-bar [loadingBar]="transcriberService.loadingBar()" />
       </section>

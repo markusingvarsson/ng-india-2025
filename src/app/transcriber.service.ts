@@ -8,7 +8,7 @@ import { WorkerService } from './worker/worker.service';
 export class TranscriberService {
   notes = signal<NoteCardProps[]>([]);
   loadingBar = signal<LoadingBarProps>({ label: 'Loading...', progress: 0 });
-
+  isTranscribing = signal(false);
   #workerService = inject(WorkerService);
 
   constructor() {
@@ -22,6 +22,17 @@ export class TranscriberService {
             progress: response.progress,
           });
           break;
+        case 'complete':
+          this.isTranscribing.set(false);
+          this.notes.update((prevNotes) => [
+            {
+              date: new Date(),
+              playbackUrl: response.playbackUrl,
+              text: response.text,
+            },
+            ...prevNotes,
+          ]);
+          break;
 
         default:
           break;
@@ -33,19 +44,11 @@ export class TranscriberService {
     processedAudio: Float32Array<ArrayBufferLike>,
     playbackUrl: string
   ) {
+    this.isTranscribing.set(true);
     this.#workerService.sendMessage({
       messageType: 'speech-to-text',
       audio: processedAudio,
       playbackUrl,
     });
-
-    this.notes.update((prevNotes) => [
-      {
-        date: new Date(),
-        playbackUrl,
-        text: 'Transcribing...',
-      },
-      ...prevNotes,
-    ]);
   }
 }
