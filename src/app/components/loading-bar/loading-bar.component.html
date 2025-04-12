@@ -1,0 +1,8 @@
+<section class="progress">
+    <p>{{ loadingBar().label }}</p>
+    <div class="progress-bar">
+      <div class="progress-bar-fill"
+           [style.width.%]="loadingBar().progress">
+      </div>
+    </div>
+  </section>

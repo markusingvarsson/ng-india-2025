@@ -1,0 +1,5 @@
+<section class="note-area">
+    <h2>{{noteCardProps().date | date: 'h:mm a - MMM d, y'}}</h2>
+    <p>{{ noteCardProps().text }}</p>
+    <audio [src]="noteCardProps().playbackUrl" controls></audio>
+  </section>
