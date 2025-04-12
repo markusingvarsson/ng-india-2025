@@ -3,10 +3,11 @@ import { AudioRecorderComponent } from './components/audio-recorder/audio-record
 import { RecordingOutput } from './components';
 import { TranscriberService } from './transcriber.service';
 import { NoteCardComponent } from './components/note-card/note-card.component';
+import { LoadingBarComponent } from './components/loading-bar/loading-bar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [AudioRecorderComponent, NoteCardComponent],
+  imports: [AudioRecorderComponent, NoteCardComponent, LoadingBarComponent],
   template: `
     <div class="app-container">
       <header class="app-header">
@@ -21,6 +22,12 @@ import { NoteCardComponent } from './components/note-card/note-card.component';
           (recordingComplete)="onRecordingComplete($event)"
         ></app-audio-recorder>
       </section>
+
+      @if(transcriberService.loadingBar().progress > 0) {
+      <section>
+        <app-loading-bar [loadingBar]="transcriberService.loadingBar()" />
+      </section>
+      }
 
       <section>
         <h2>Notes</h2>
