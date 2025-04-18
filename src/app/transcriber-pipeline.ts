@@ -11,7 +11,10 @@ export class TranscriberPipeline {
       this.instance = pipeline(
         'automatic-speech-recognition',
         'Xenova/whisper-base',
-        { progress_callback, device: 'webgpu' }
+        {
+          progress_callback,
+          // , device: 'webgpu'
+        }
       );
     }
     return this.instance;
